@@ -13,4 +13,4 @@ WORKDIR /app
 RUN mkdir uploads
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xss512k", "-XX:CICompilerCount=2", "-jar", "app.jar"]
