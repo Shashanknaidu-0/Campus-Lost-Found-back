@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -17,6 +18,9 @@ import java.util.UUID;
 public class FileUploadController {
 
     private final Path uploadDir = Paths.get("uploads");
+
+    @Value("${DOMAIN:http://localhost:8080}")
+    private String domainUrl;
 
     public FileUploadController() {
         try {
@@ -37,7 +41,7 @@ public class FileUploadController {
             Files.copy(file.getInputStream(), filePath);
             
             // Return public URL relative to the backend context
-            return ResponseEntity.ok("http://localhost:8080/uploads/" + filename);
+            return ResponseEntity.ok(domainUrl + "/uploads/" + filename);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Could not upload file: " + e.getMessage());
         }
